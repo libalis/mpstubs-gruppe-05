@@ -1,0 +1,32 @@
+# This is a configuration file for GitLab Continuous Integration (CI).
+#
+# At each "push", GitLab will use this file (named '.gitlab-ci.yml') to start
+# a docker container with the image of a Linux distribution (in this case
+# Ubuntu Focal) with an already installed build tool chain and compile the
+# source in the git repository.
+# The status (indicated by the exit code of 'make') is clearly visible on the
+# project page of your repository in GitLab:
+# If a commit contains an invalid (untranslatable) state, an error (red 'x')
+# is displayed and the author is notified by mail.
+#
+# Please note: This will only test the build of your operating system,
+# but not the [correct] functionality!
+#
+#Further information: https://docs.gitlab.com/ee/ci/
+
+GCC-Build:
+  image: inf4/stubs:gcc-x64
+  script:
+    - if [ -f Makefile ] ; then make clean ; make ; fi
+
+# Optional: Use Clang 11
+#Clang-Build:
+#  image: inf4/stubs:clang-x64
+#  script:
+#    - make clean ; make CXX=clang++-11
+
+# Check style guide using cpplint
+linter:
+  image: inf4/stubs:cpplint
+  script:
+    - if [ -f Makefile ] ; then make clean ; make lint ; fi
