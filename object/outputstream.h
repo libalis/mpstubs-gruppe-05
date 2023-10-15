@@ -58,9 +58,12 @@
  *  whose detailed description is given below.
  */
 
-class OutputStream {
+class OutputStream : public Stringbuffer {
 	OutputStream(const OutputStream&)            = delete;
 	OutputStream& operator=(const OutputStream&) = delete;
+
+ private:
+	OutputStream& helper(unsigned long long ival, bool sign);
 
  public:
 	/*! \brief Number system used for printing integral numbers (one of 2,
