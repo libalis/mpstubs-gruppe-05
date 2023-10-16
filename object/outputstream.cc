@@ -6,15 +6,11 @@ OutputStream& OutputStream::operator << (char c) {
 }
 
 OutputStream& OutputStream::operator << (unsigned char c) {
-    char p = static_cast<char>(c);
-	put(p);
-	return *this;
+    return (*this << static_cast<char>(c));
 }
 
 OutputStream& OutputStream::operator << (const char* string) {
-    char c;
-    int i = 0;
-    while((c = string[i++]) != '\0') put(c);
+    for (int i = 0; string[i] != '\0'; i++) (*this << string[i]);
     return *this;
 }
 
@@ -27,9 +23,7 @@ OutputStream& OutputStream::helper(unsigned long long ival, bool sign = false) {
     if (base == 2) *this << "0b";
     else if (base == 8) *this << '0';
     else if (base == 16) *this << "0x";
-    if (ival == 0) {
-        return (*this << '0');
-    }
+    if (ival == 0) return (*this << '0');
     char binary[2] = {'0', '1'};
     char octal[8] = {'0', '1', '2', '3', '4', '5', '6', '7'};
     char decimal[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
