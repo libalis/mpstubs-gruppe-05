@@ -16,7 +16,7 @@ extern "C" int main() {
 	return 0;
 }
 
-// Main function  for application processors
+// Main function for application processors
 extern "C" int main_ap() {
 	DBG_VERBOSE << "CPU core " << static_cast<int>(Core::getID())
 	            << " / LAPIC " << static_cast<int>(LAPIC::getID()) << " in main_ap()" << endl;

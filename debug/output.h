@@ -62,4 +62,3 @@
  *  \todo Define `dout`
  */
 extern TextStream dout[Core::MAX];
-

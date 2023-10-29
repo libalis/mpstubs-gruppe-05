@@ -21,6 +21,15 @@ class TextWindow : public TextMode {
 	TextWindow(const TextWindow&)            = delete;
 	TextWindow& operator=(const TextWindow&) = delete;
 
+ protected:
+	unsigned from_col;
+	unsigned to_col;
+	unsigned from_row;
+	unsigned to_row;
+	bool use_cursor;
+	unsigned pos_x;
+	unsigned pos_y;
+
  public:
 	/*! \brief Constructor of a text window
 	 *

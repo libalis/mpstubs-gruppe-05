@@ -83,11 +83,11 @@ enum ControllerCommand {
  */
 static void MAYBE_UNUSED sendData(uint8_t value) {
 	// TODO: You have to implement this method
-	(void) value;
+	while (ctrl_port.inb() == INPUT_PENDING) {}
+	data_port.outb(value);
 }
 
 void init() {
-
 	// Switch all LEDs off (on many PCs NumLock is turned on after power up)
 	setLed(LED_CAPS_LOCK, false);
 	setLed(LED_SCROLL_LOCK, false);
@@ -99,20 +99,25 @@ void init() {
 
 bool fetch(Key &pressed) {
 	// TODO: You have to implement this method
-	(void) pressed;
-	return false;
+	unsigned char code = data_port.inw();
+	while ((pressed = key_decoder.decode(code)) == false) {}
+	return true;
 }
 
 void setRepeatRate(Speed speed, Delay delay) {
 	// TODO: You have to implement this method. Use sendData()
-	(void) speed;
-	(void) delay;
+	sendData(KEYBOARD_SET_SPEED);
+	uint8_t parameter_byte = delay << 5;
+	parameter_byte |= speed;
+	sendData(parameter_byte);
 }
 
 void setLed(enum LED led, bool on) {
 	// TODO: You have to implement this method. Use sendData()
-	(void) led;
-	(void) on;
+	sendData(KEYBOARD_SET_LED);
+	if (on) leds |= led;
+	else leds ^= led;
+	sendData(leds);
 }
 
 }  // namespace PS2Controller
