@@ -72,12 +72,8 @@ class TextMode {
 		 *  \param background Background color (Default: \ref BLACK)
 		 *  \param blink Blink if `true` (default: no blinking)
 		 */
-		explicit Attribute(Color foreground = LIGHT_GREY, Color background = BLACK, bool blink = false)
-			 {  //NOLINT
-				(void) foreground;
-				(void) background;
-				(void) blink;
-			}
+		explicit Attribute(Color foreground = LIGHT_GREY, Color background = BLACK, bool blink = false) :
+			foreground(foreground), background(background), blink(blink) {}
 
 	} __attribute__((packed));  // prevent padding by the compiler
 

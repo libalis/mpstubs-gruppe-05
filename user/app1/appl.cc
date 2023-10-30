@@ -1,13 +1,5 @@
 #include "user/app1/appl.h"
-#include "object/outputstream.h"
-#include "types.h"
-
-/*
-TextStream kout = {0, COLUMNS, 0, ROWS-Core::count()/2*3, on};
-for (unsigned i = 0; i < Core::count(); i++) {
-    TextStream dout[i] = {i%2*TextMode::COLUMNS/2, (i%2+1)*TextMode::COLUMNS/2, TextMode::ROWS-Core::count()/2*3+i/2*3, TextMode::ROWS-Core::count()/2*3+i/2*3+3};
-}
-*/
+#include "debug/output.h"
 
 void Application::action() {
     kout << "Test          <stream result> -> <expected>" << endl;

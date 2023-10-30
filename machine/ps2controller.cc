@@ -83,7 +83,7 @@ enum ControllerCommand {
  */
 static void MAYBE_UNUSED sendData(uint8_t value) {
 	// TODO: You have to implement this method
-	while (ctrl_port.inb() == INPUT_PENDING) {}
+	while ((ctrl_port.inb() & 0x02) == INPUT_PENDING) {}
 	data_port.outb(value);
 }
 
@@ -99,9 +99,10 @@ void init() {
 
 bool fetch(Key &pressed) {
 	// TODO: You have to implement this method
+	while ((ctrl_port.inb() & 0x01) != HAS_OUTPUT) {}
 	unsigned char code = data_port.inw();
-	while ((pressed = key_decoder.decode(code)) == false) {}
-	return true;
+	pressed = key_decoder.decode(code);
+	return pressed.valid();
 }
 
 void setRepeatRate(Speed speed, Delay delay) {
@@ -116,7 +117,8 @@ void setLed(enum LED led, bool on) {
 	// TODO: You have to implement this method. Use sendData()
 	sendData(KEYBOARD_SET_LED);
 	if (on) leds |= led;
-	else leds ^= led;
+	else
+		leds ^= led;
 	sendData(leds);
 }
 

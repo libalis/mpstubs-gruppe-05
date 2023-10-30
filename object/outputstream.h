@@ -76,7 +76,7 @@ class OutputStream : public Stringbuffer {
 	 *  \todo Implement Constructor
 	 *
 	 */
-	OutputStream() {}
+	OutputStream() : base(10) {}
 
 	/*! \brief Destructor
 	 */

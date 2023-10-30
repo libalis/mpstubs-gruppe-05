@@ -12,6 +12,7 @@ class Application {
  public:
 	/*! \brief Constructor
 	 */
+	Application() {}
 
 	/*! \brief Contains the application code.
 	 *

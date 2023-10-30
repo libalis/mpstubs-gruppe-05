@@ -14,6 +14,7 @@ class KeyboardApplication {
  public:
 	/*! \brief Constructor
 	 */
+	KeyboardApplication() {}
 
 	/*! \brief Contains the application code.
 	 *
