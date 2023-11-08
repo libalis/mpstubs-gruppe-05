@@ -48,7 +48,6 @@ extern "C" int main() {
 	aout.print("CPU 2 ready", strlen("CPU 2 ready"), TextMode::Attribute(TextMode::MAGENTA));
 	aout.setPos(TextMode::COLUMNS/2, 21);
 	aout.print("CPU 3 ready", strlen("CPU 3 ready"), TextMode::Attribute(TextMode::RED));
-	delete &aout;
 
 	Application().action();
 	KeyboardApplication().action();
