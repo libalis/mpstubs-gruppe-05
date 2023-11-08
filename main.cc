@@ -40,6 +40,7 @@ extern "C" int main() {
 	ApplicationProcessor::boot();
 
 	TextStream aout{0, TextMode::COLUMNS, 0, TextMode::ROWS};
+	aout.reset();
 	aout.setPos(0, 17);
 	aout.print("CPU 0 ready", strlen("CPU 0 ready"));
 	aout.setPos(TextMode::COLUMNS/2, 17);
