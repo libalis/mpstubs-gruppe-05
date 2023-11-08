@@ -18,5 +18,5 @@ void Application::action() {
     kout << "some int64_t: " << (1234567890123456789) << " -> 1234567890123456789" << endl;
     kout << "pointer:      " << reinterpret_cast<void*>(1994473406541717165ull) << " -> 0x1badcafefee1dead" << endl;
     kout << "smiley:       " << static_cast<char>(1) << endl;
-    kout.print("blink", strlen("blink"), TextMode::Attribute(TextMode::LIGHT_GREY, TextMode::BLACK, true));
+    kout.print("blink\n", strlen("blink\n"), TextMode::Attribute(TextMode::LIGHT_GREY, TextMode::BLACK, true));
 }
