@@ -8,6 +8,7 @@ TextWindow::TextWindow(unsigned from_col, unsigned to_col, unsigned from_row, un
     }
 
 void TextWindow::setPos(unsigned rel_x, unsigned rel_y) {
+    if (rel_x < from_col || rel_x >= to_col || rel_y < from_row || rel_y >= to_row) return;
     if (use_cursor) {
         TextMode::setCursor(rel_x + from_col, rel_y + from_row);
         return;
@@ -55,17 +56,10 @@ void TextWindow::print(const char* string, size_t length, Attribute attrib) {
             setPos(abs_x - from_col, abs_y - from_row);
             continue;
         }
-        if (abs_x >= to_col) {
-            abs_x = from_col;
-            abs_y++;
-        }
-        if (abs_y >= to_row) {
-            abs_y = to_row - 1;
-            helper(from_row, to_row, from_col, to_col);
-        }
         TextMode::show(abs_x, abs_y, string[i], attrib);
         abs_x++;
         if (abs_x >= to_col) {
+            abs_x = from_col;
             abs_y++;
             if (abs_y >= to_row) {
                 abs_y = to_row - 1;

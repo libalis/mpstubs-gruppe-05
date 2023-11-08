@@ -2,6 +2,7 @@
 #include "machine/ioport.h"
 
 void TextMode::setCursor(unsigned abs_x, unsigned abs_y) {
+    if (abs_x >= TextMode::COLUMNS || abs_y >= TextMode::ROWS) return;
     IOPort index_register = IOPort(0x3d4);
     IOPort daten_register = IOPort(0x3d5);
     uint16_t position = abs_x + abs_y * COLUMNS;
@@ -26,6 +27,7 @@ void TextMode::getCursor(unsigned& abs_x, unsigned& abs_y) {
 }
 
 void TextMode::show(unsigned abs_x, unsigned abs_y, char character, Attribute attrib) {
+    if (abs_x >= TextMode::COLUMNS || abs_y >= TextMode::ROWS) return;
     uint16_t position = abs_x + abs_y * COLUMNS;
     char* address_character = reinterpret_cast<char*>(0xb8000 + position * 2);
     *address_character = character;

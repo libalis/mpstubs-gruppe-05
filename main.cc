@@ -5,17 +5,6 @@
 #include "user/app2/kappl.h"
 #include "utils/string.h"
 
-/*TextStream kout(0, TextMode::COLUMNS, 0, TextMode::ROWS-Core::MAX/2*3, true);
-TextStream dout[Core::MAX]{
-	{0, 40, 13, 16},
-	{40, 80, 13, 16},
-	{0, 40, 16, 19},
-	{40, 80, 16, 19},
-	{0, 40, 19, 22},
-	{40, 80, 19, 22},
-	{0, 40, 22, 25},
-	{40, 80, 22, 25},
-};*/
 TextStream kout(0, TextMode::COLUMNS, 0, 17, true);
 TextStream dout[Core::MAX]{
 	{0, TextMode::COLUMNS/2, 18, 21},
@@ -50,6 +39,7 @@ extern "C" int main() {
 	aout.setPos(TextMode::COLUMNS/2, 21);
 	aout.print("CPU 3 ready", strlen("CPU 3 ready"), TextMode::Attribute(TextMode::RED));
 
+	kout.reset();
 	Application().action();
 	KeyboardApplication().action();
 

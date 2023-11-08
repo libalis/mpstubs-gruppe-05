@@ -48,7 +48,7 @@ class Stringbuffer {
 	 *
 	 *  \todo Complete Constructor
 	 */
-	Stringbuffer() { }
+	Stringbuffer() : pos(0) {}
 
 	/*! \brief Inserts a character into the buffer.
 	 *
