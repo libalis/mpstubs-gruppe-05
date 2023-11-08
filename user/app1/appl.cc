@@ -2,6 +2,7 @@
 #include "debug/output.h"
 
 void Application::action() {
+    kout.reset();
     kout << "Test          <stream result> -> <expected>" << endl;
     kout << "bool:         " << true << " -> true" << endl;
     kout << "zero:         " << 0 << " -> 0" << endl;

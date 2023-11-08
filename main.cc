@@ -4,7 +4,7 @@
 #include "user/app1/appl.h"
 #include "user/app2/kappl.h"
 
-TextStream kout(0, TextMode::COLUMNS, 0, TextMode::ROWS-Core::MAX/2*3, true);
+/*TextStream kout(0, TextMode::COLUMNS, 0, TextMode::ROWS-Core::MAX/2*3, true);
 TextStream dout[Core::MAX]{
 	{0, 40, 13, 16},
 	{40, 80, 13, 16},
@@ -14,6 +14,17 @@ TextStream dout[Core::MAX]{
 	{40, 80, 19, 22},
 	{0, 40, 22, 25},
 	{40, 80, 22, 25},
+};*/
+TextStream kout(0, TextMode::COLUMNS, 0, 19, true);
+TextStream dout[Core::MAX]{
+	{0, TextMode::COLUMNS/2, 19, 22},
+	{TextMode::COLUMNS/2, TextMode::COLUMNS, 19, 22},
+	{0, TextMode::COLUMNS/2, 22, 25},
+	{TextMode::COLUMNS/2, TextMode::COLUMNS, 22, 25},
+	{0, 0, 0, 0},
+	{0, 0, 0, 0},
+	{0, 0, 0, 0},
+	{0, 0, 0, 0},
 };
 
 const char * os_name = "MP" "StuBS";
