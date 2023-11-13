@@ -8,7 +8,7 @@ TextWindow::TextWindow(unsigned from_col, unsigned to_col, unsigned from_row, un
     }
 
 void TextWindow::setPos(unsigned rel_x, unsigned rel_y) {
-    if (rel_x < from_col || rel_x >= to_col || rel_y < from_row || rel_y >= to_row) return;
+    if (rel_x >= to_col - from_col || rel_y >= to_row - from_row) return;
     if (use_cursor) {
         TextMode::setCursor(rel_x + from_col, rel_y + from_row);
         return;
@@ -40,10 +40,10 @@ void TextWindow::print(const char* string, size_t length, Attribute attrib) {
         }
         for (unsigned int x = from_col; x < to_col; x++) TextMode::show(x, to_row - 1, ' ');
     };
+    unsigned abs_x;
+    unsigned abs_y;
+    getPos(abs_x, abs_y);
     for (size_t i = 0; i < length; i++) {
-        unsigned abs_x;
-        unsigned abs_y;
-        getPos(abs_x, abs_y);
         abs_x += from_col;
         abs_y += from_row;
         if (string[i] == '\n') {
@@ -53,7 +53,8 @@ void TextWindow::print(const char* string, size_t length, Attribute attrib) {
                 abs_y = to_row - 1;
                 helper(from_row, to_row, from_col, to_col);
             }
-            setPos(abs_x - from_col, abs_y - from_row);
+            abs_x -= from_col;
+            abs_y -= from_row;
             continue;
         }
         TextMode::show(abs_x, abs_y, string[i], attrib);
@@ -66,8 +67,10 @@ void TextWindow::print(const char* string, size_t length, Attribute attrib) {
                 helper(from_row, to_row, from_col, to_col);
                 }
         }
-        setPos(abs_x - from_col, abs_y - from_row);
+        abs_x -= from_col;
+        abs_y -= from_row;
     }
+    setPos(abs_x - from_col, abs_y - from_row);
 }
 
 void TextWindow::reset(char character, Attribute attrib) {

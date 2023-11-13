@@ -99,7 +99,9 @@ void init() {
 
 bool fetch(Key &pressed) {
 	// TODO: You have to implement this method
-	while ((ctrl_port.inb() & (HAS_OUTPUT | IS_MOUSE)) != HAS_OUTPUT) {}
+	uint8_t c;
+	while (((c = ctrl_port.inb()) & (HAS_OUTPUT | IS_MOUSE)) != HAS_OUTPUT)
+		if ((c & (HAS_OUTPUT | IS_MOUSE)) == (HAS_OUTPUT | IS_MOUSE)) data_port.inb();
 	unsigned char code = data_port.inb();
 	pressed = key_decoder.decode(code);
 	return pressed.valid();
