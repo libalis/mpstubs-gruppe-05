@@ -14,6 +14,10 @@
  */
 class FileOut : public OutputStream {
     // TODO: Add (private) attributes, if required
+ private:
+	static int counter;
+	const char* path;
+	int file;
 
  public:
 	/*! \brief Constructor

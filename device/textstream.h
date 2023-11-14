@@ -20,19 +20,14 @@
  * \ref TextWindow and only implements the method \ref TextStream::flush().
  * Further formatting or special effects are implemented in \ref TextWindow.
  */
-class TextStream {
+class TextStream : public OutputStream, public TextWindow {
 	// Prevent copies and assignments
 	TextStream(const TextStream&)            = delete;
 	TextStream& operator=(const TextStream&) = delete;
  public:
 	/// \copydoc TextWindow::TextWindow(unsigned,unsigned,unsigned,unsigned,bool)
-	TextStream(unsigned from_col, unsigned to_col, unsigned from_row, unsigned to_row, bool use_cursor = false) {
-		(void) from_col;
-		(void) to_col;
-		(void) from_row;
-		(void) to_row;
-		(void) use_cursor;
-	}
+	TextStream(unsigned from_col, unsigned to_col, unsigned from_row, unsigned to_row, bool use_cursor = false) :
+		TextWindow(from_col, to_col, from_row, to_row, use_cursor) {}
 
 	/*! \brief Output the buffer contents of the base class \ref Stringbuffer
 	 *
