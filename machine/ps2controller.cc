@@ -1,8 +1,9 @@
 #include "machine/ps2controller.h"
-#include "machine/keydecoder.h"
-#include "machine/ioport.h"
-#include "debug/output.h"
 #include "compiler/fix.h"
+#include "debug/output.h"
+#include "machine/ioport.h"
+#include "machine/keydecoder.h"
+#include "sync/ticketlock.h"
 
 namespace PS2Controller {
 
@@ -100,10 +101,12 @@ void init() {
 bool fetch(Key &pressed) {
 	// TODO: You have to implement this method
 	uint8_t c;
+	fetchLock.lock();
 	while (((c = ctrl_port.inb()) & (HAS_OUTPUT | IS_MOUSE)) != HAS_OUTPUT)
 		if ((c & (HAS_OUTPUT | IS_MOUSE)) == (HAS_OUTPUT | IS_MOUSE)) data_port.inb();
 	unsigned char code = data_port.inb();
 	pressed = key_decoder.decode(code);
+	fetchLock.unlock();
 	return pressed.valid();
 }
 
@@ -122,6 +125,10 @@ void setLed(enum LED led, bool on) {
 	else
 		leds &= ~led;
 	sendData(leds);
+}
+
+void drainBuffer() {
+	while ((ctrl_port.inb() & HAS_OUTPUT) == HAS_OUTPUT) data_port.inb();
 }
 
 }  // namespace PS2Controller

@@ -63,3 +63,4 @@
  */
 extern TextStream dout[Core::MAX];
 extern TextStream kout;
+extern TextStream kbout;
