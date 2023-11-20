@@ -6,10 +6,10 @@
 void Application::action() {
     uint64_t count = 0;
     while (true) {
-        koutLock.lock();
+        ticketlock.lock();
         kout.setPos(0, Core::getID() + 1);
         kout << count++;
         kout.flush();
-        koutLock.unlock();
+        ticketlock.unlock();
     }
 }

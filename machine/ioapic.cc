@@ -55,10 +55,14 @@ void config(uint8_t slot, Core::Interrupt::Vector vector, TriggerMode trigger_mo
     assert(slot < slot_max);
     *IOREGSEL_REG = IOREDTBL_IDX + slot * IOREDTBL_ENTRY_SIZE;
     Register low = *IOWIN_REG;
-    RedirectionTableEntry entry{low, 0};
+    *IOREGSEL_REG += IOREDTBL_ENTRY_SIZE / 2;
+    Register high = *IOWIN_REG;
+    RedirectionTableEntry entry{low, high};
     entry.vector = vector;
     entry.trigger_mode = trigger_mode;
     entry.polarity = polarity;
+    *IOWIN_REG = entry.value_high;
+    *IOREGSEL_REG -= IOREDTBL_ENTRY_SIZE / 2;
     *IOWIN_REG = entry.value_low;
 }
 
@@ -66,8 +70,12 @@ void allow(uint8_t slot) {
     assert(slot < slot_max);
     *IOREGSEL_REG = IOREDTBL_IDX + slot * IOREDTBL_ENTRY_SIZE;
     Register low = *IOWIN_REG;
-    RedirectionTableEntry entry{low, 0};
+    *IOREGSEL_REG += IOREDTBL_ENTRY_SIZE / 2;
+    Register high = *IOWIN_REG;
+    RedirectionTableEntry entry{low, high};
     entry.interrupt_mask = UNMASKED;
+    *IOWIN_REG = entry.value_high;
+    *IOREGSEL_REG -= IOREDTBL_ENTRY_SIZE / 2;
     *IOWIN_REG = entry.value_low;
     Core::Interrupt::enable();
 }
@@ -76,8 +84,12 @@ void forbid(uint8_t slot) {
     assert(slot < slot_max);
     *IOREGSEL_REG = IOREDTBL_IDX + slot * IOREDTBL_ENTRY_SIZE;
     Register low = *IOWIN_REG;
-    RedirectionTableEntry entry{low, 0};
+    *IOREGSEL_REG += IOREDTBL_ENTRY_SIZE / 2;
+    Register high = *IOWIN_REG;
+    RedirectionTableEntry entry{low, high};
     entry.interrupt_mask = MASKED;
+    *IOWIN_REG = entry.value_high;
+    *IOREGSEL_REG -= IOREDTBL_ENTRY_SIZE / 2;
     *IOWIN_REG = entry.value_low;
 }
 
@@ -85,7 +97,9 @@ bool status(uint8_t slot) {
     assert(slot < slot_max);
     *IOREGSEL_REG = IOREDTBL_IDX + slot * IOREDTBL_ENTRY_SIZE;
     Register low = *IOWIN_REG;
-    RedirectionTableEntry entry{low, 0};
+    *IOREGSEL_REG += IOREDTBL_ENTRY_SIZE / 2;
+    Register high = *IOWIN_REG;
+    RedirectionTableEntry entry{low, high};
     return entry.interrupt_mask == UNMASKED;
 }
 

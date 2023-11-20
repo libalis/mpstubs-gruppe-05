@@ -1,6 +1,5 @@
 #include "device/keyboard.h"
 #include "debug/output.h"
-#include "device/textstream.h"
 #include "interrupt/plugbox.h"
 #include "machine/apic.h"
 #include "machine/core_interrupt.h"

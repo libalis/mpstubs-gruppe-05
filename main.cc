@@ -17,11 +17,10 @@ TextStream dout[Core::MAX]{
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 };
-TextStream kout(0, TextMode::COLUMNS, 0, 17, true);
+TextStream kout{0, TextMode::COLUMNS, 0, 17, true};
 TextStream kbout{0, TextMode::COLUMNS, 0, 1};
 
-Ticketlock fetchLock{};
-Ticketlock koutLock{};
+Ticketlock ticketlock{};
 
 const char * os_name = "MP" "StuBS";
 

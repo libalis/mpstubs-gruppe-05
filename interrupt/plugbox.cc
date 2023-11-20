@@ -3,7 +3,7 @@
 #include "device/panic.h"
 #include "machine/core_interrupt.h"
 
-Gate* plugbox[Core::Interrupt::VECTORS]{};
+Gate* plugbox[Core::Interrupt::VECTORS]{NULL};
 Panic* panic{};
 
 void Plugbox::assign(Core::Interrupt::Vector vector, Gate *gate) {
@@ -11,5 +11,5 @@ void Plugbox::assign(Core::Interrupt::Vector vector, Gate *gate) {
 }
 
 Gate* Plugbox::report(Core::Interrupt::Vector vector) {
-    return plugbox[vector] == NULL ? panic : plugbox[vector];
+    return (plugbox[vector] != NULL) ? plugbox[vector] : panic;
 }

@@ -55,5 +55,4 @@ class Ticketlock {
 	void unlock();
 };
 
-extern Ticketlock fetchLock;
-extern Ticketlock koutLock;
+extern Ticketlock ticketlock;

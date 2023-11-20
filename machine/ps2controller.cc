@@ -101,12 +101,10 @@ void init() {
 bool fetch(Key &pressed) {
 	// TODO: You have to implement this method
 	uint8_t c;
-	fetchLock.lock();
-	while (((c = ctrl_port.inb()) & (HAS_OUTPUT | IS_MOUSE)) != HAS_OUTPUT)
-		if ((c & (HAS_OUTPUT | IS_MOUSE)) == (HAS_OUTPUT | IS_MOUSE)) data_port.inb();
+	if (((c = ctrl_port.inb()) & HAS_OUTPUT) != HAS_OUTPUT) return false;
 	unsigned char code = data_port.inb();
+	if ((c & IS_MOUSE) == IS_MOUSE) return false;
 	pressed = key_decoder.decode(code);
-	fetchLock.unlock();
 	return pressed.valid();
 }
 
