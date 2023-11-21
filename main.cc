@@ -22,6 +22,8 @@ TextStream kbout{0, TextMode::COLUMNS, 0, 1};
 
 Ticketlock ticketlock{};
 
+Keyboard keyboard{};
+
 const char * os_name = "MP" "StuBS";
 
 // Main function (the bootstrap processor starts here)
@@ -34,15 +36,21 @@ extern "C" int main() {
 	aout.reset();
 	aout.setPos(0, 17);
 	aout.print("CPU 0 ready", strlen("CPU 0 ready"));
-	aout.setPos(TextMode::COLUMNS/2, 17);
-	aout.print("CPU 1 ready", strlen("CPU 1 ready"),
-		TextMode::Attribute(static_cast<TextMode::Color>(TextMode::WHITE - 1)));
-	aout.setPos(0, 21);
-	aout.print("CPU 2 ready", strlen("CPU 2 ready"),
-		TextMode::Attribute(static_cast<TextMode::Color>(TextMode::WHITE - 2)));
-	aout.setPos(TextMode::COLUMNS/2, 21);
-	aout.print("CPU 3 ready", strlen("CPU 3 ready"),
-		TextMode::Attribute(static_cast<TextMode::Color>(TextMode::WHITE - 3)));
+	if (Core::count() > 1) {
+		aout.setPos(TextMode::COLUMNS/2, 17);
+		aout.print("CPU 1 ready", strlen("CPU 1 ready"),
+			TextMode::Attribute(static_cast<TextMode::Color>(TextMode::WHITE - 1)));
+	}
+	if (Core::count() > 2) {
+		aout.setPos(0, 21);
+		aout.print("CPU 2 ready", strlen("CPU 2 ready"),
+			TextMode::Attribute(static_cast<TextMode::Color>(TextMode::WHITE - 2)));
+	}
+	if (Core::count() > 3) {
+		aout.setPos(TextMode::COLUMNS/2, 21);
+		aout.print("CPU 3 ready", strlen("CPU 3 ready"),
+			TextMode::Attribute(static_cast<TextMode::Color>(TextMode::WHITE - 3)));
+	}
 
 	kout.reset();
 
@@ -51,7 +59,10 @@ extern "C" int main() {
 
 	PS2Controller::init();
 	PS2Controller::drainBuffer();
-	Keyboard{}.plugin();
+
+	keyboard.plugin();
+
+	Core::Interrupt::enable();
 
 	Application{}.action();
 
@@ -62,6 +73,8 @@ extern "C" int main() {
 extern "C" int main_ap() {
 	DBG_VERBOSE << "CPU core " << static_cast<int>(Core::getID())
 	            << " / LAPIC " << static_cast<int>(LAPIC::getID()) << " in main_ap()" << endl;
+
+	Core::Interrupt::enable();
 
 	Application{}.action();
 

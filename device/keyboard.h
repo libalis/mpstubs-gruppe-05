@@ -5,7 +5,7 @@
 #pragma once
 
 #include "interrupt/gate.h"
-#include "object/key.h"
+#include "debug/output.h"
 
 /*! \brief Handles keystrokes.
  *  \ingroup io
@@ -19,12 +19,16 @@ class Keyboard : public Gate {
 	Keyboard(const Keyboard&)            = delete;
 	Keyboard& operator=(const Keyboard&) = delete;
 
- private:
-
  public:
 	/*! \brief Constructor
 	 */
 	Keyboard() {}
+
+	/*! \brief Destructor
+	 */
+	~Keyboard() {
+		DBG << "Keyboard::~Keyboard()" << endl;
+	}
 
 	/*! \brief Initialization of the keyboard
 	 *
@@ -58,3 +62,5 @@ class Keyboard : public Gate {
 	void trigger() override;
 
 };
+
+extern Keyboard keyboard;

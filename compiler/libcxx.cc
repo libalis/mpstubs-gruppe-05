@@ -25,7 +25,7 @@ extern "C" int __cxa_atexit(void (*func)(void *), void * arg, void * dso_handle)
 }
 
 extern "C" [[noreturn]] void __cxa_pure_virtual() {
-	// Pure virtual function was called -- this if obviously not valid,
+	// Pure virtual function was called -- this is obviously not valid,
 	// therefore we wait infinitely.
 	while (true) {}
 }
