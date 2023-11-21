@@ -2,6 +2,6 @@
 #include "debug/output.h"
 
 void Panic::trigger() {
-    DBG << "Panic::trigger()" << endl;
+    DBG << "Panic::trigger" << endl;
     Core::die();
 }

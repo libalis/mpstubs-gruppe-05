@@ -27,7 +27,7 @@ class Keyboard : public Gate {
 	/*! \brief Destructor
 	 */
 	~Keyboard() {
-		DBG << "Keyboard::~Keyboard()" << endl;
+		DBG << "Keyboard::~Keyboard" << endl;
 	}
 
 	/*! \brief Initialization of the keyboard
