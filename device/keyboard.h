@@ -19,10 +19,13 @@ class Keyboard : public Gate {
 	Keyboard(const Keyboard&)            = delete;
 	Keyboard& operator=(const Keyboard&) = delete;
 
+ private:
+	volatile uint8_t position;
+
  public:
 	/*! \brief Constructor
 	 */
-	Keyboard() {}
+	Keyboard() : position(0) {}
 
 	/*! \brief Destructor
 	 */

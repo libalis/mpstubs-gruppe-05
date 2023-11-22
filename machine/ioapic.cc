@@ -27,10 +27,7 @@ const uint8_t slot_max = 24;
 void init() {
     for (uint8_t slot = 0; slot < slot_max; slot++) {
         RedirectionTableEntry entry{0, 0};
-        uint8_t destination_field = 0;
-        for (unsigned int i = 0; i < Core::count(); i++)
-            destination_field |= (1 << i);
-        entry.destination = destination_field;
+        entry.destination = (1 << Core::count()) - 1;
         entry.interrupt_mask = MASKED;
         entry.trigger_mode = EDGE;
         entry.polarity = HIGH;
@@ -77,7 +74,6 @@ void allow(uint8_t slot) {
     *IOWIN_REG = entry.value_high;
     *IOREGSEL_REG -= IOREDTBL_ENTRY_SIZE / 2;
     *IOWIN_REG = entry.value_low;
-    Core::Interrupt::enable();
 }
 
 void forbid(uint8_t slot) {

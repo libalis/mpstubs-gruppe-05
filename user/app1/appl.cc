@@ -6,10 +6,12 @@
 void Application::action() {
     uint64_t count = 0;
     while (true) {
+        Core::Interrupt::disable();
         ticketlock.lock();
         kout.setPos(0, Core::getID() + 1);
         kout << count++;
         kout.flush();
         ticketlock.unlock();
+        Core::Interrupt::enable();
     }
 }
