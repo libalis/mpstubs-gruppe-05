@@ -8,5 +8,5 @@ void Ticketlock::lock() {
 }
 
 void Ticketlock::unlock() {
-    ticket_current++;
+    __atomic_fetch_add(&ticket_current, 1, __ATOMIC_SEQ_CST);
 }

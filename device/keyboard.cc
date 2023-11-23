@@ -18,6 +18,7 @@ void Keyboard::plugin() {
 void Keyboard::trigger() {
     Key pressed;
     if (PS2Controller::fetch(pressed)) {
+        if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL) System::reboot();
         ticketlock.lock();
         kout.setPos(position, 0);
         position++;
@@ -26,5 +27,4 @@ void Keyboard::trigger() {
         kout.flush();
         ticketlock.unlock();
     }
-    if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL) System::reboot();
 }
