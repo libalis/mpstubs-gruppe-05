@@ -124,4 +124,6 @@ enum LED {
  */
 void setLed(enum LED led, bool on);
 
+void drainBuffer();
+
 }  // namespace PS2Controller

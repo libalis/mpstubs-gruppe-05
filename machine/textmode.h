@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "machine/core.h"
 #include "types.h"
 
 /*! \brief Basic operations in the VGA-compatible text mode
@@ -72,8 +73,8 @@ class TextMode {
 		 *  \param background Background color (Default: \ref BLACK)
 		 *  \param blink Blink if `true` (default: no blinking)
 		 */
-		explicit Attribute(Color foreground = LIGHT_GREY, Color background = BLACK, bool blink = false) :
-			foreground(foreground), background(background), blink(blink) {}
+		explicit Attribute(Color foreground = static_cast<Color>(Color::WHITE - Core::getID()), Color background = BLACK,
+			bool blink = false) : foreground(foreground), background(background), blink(blink) {}
 
 	} __attribute__((packed));  // prevent padding by the compiler
 

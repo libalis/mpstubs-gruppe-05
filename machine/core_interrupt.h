@@ -55,6 +55,7 @@ enum Vector {
 	// Interrupts
 	TIMER                    = 32,    ///< Periodic CPU local \ref LAPIC::Timer interrupt
 	KEYBOARD                 = 33,    ///< Keyboard interrupt (key press / release)
+	PANIC                    = 34,    ///< Default handler for (unconfigured) interrupt events
 	GDB                      = 35,    ///< Inter-processor interrupt to stop other CPUs for debugging in \ref GDB
 	ASSASSIN                 = 100,   ///< Inter-processor interrupt to immediately stop threads running on other CPUs
 	WAKEUP                   = 101,   ///< Inter-processor interrupt to WakeUp sleeping CPUs

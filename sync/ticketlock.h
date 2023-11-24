@@ -29,12 +29,16 @@ class Ticketlock {
 	Ticketlock(const Ticketlock& copy) = delete;
 	Ticketlock& operator=(const Ticketlock&) = delete;
 
+ private:
+	volatile uint64_t ticket_current;
+	volatile uint64_t ticket_count;
+
  public:
 	/*! \brief Constructor
 	 *
 	 * \todo Complete Constructor (for \MPStuBS)
 	 */
-	Ticketlock() {}
+	Ticketlock() : ticket_current(0), ticket_count(0) {}
 
 	/*! \brief Enters the critical area. In case the area is already locked,
 	 *  \ref lock() will actively wait for the area can be entered.
@@ -42,14 +46,13 @@ class Ticketlock {
 	 * \see \ref Core::pause()
 	 * \todo Implement Method (for \MPStuBS)
 	 */
-	void lock() {
-	}
+	void lock();
 
 	/*! \brief Unblocks the critical area.
 	 *
 	 * \todo Implement Method (for \MPStuBS)
 	 */
-	void unlock() {
-	}
+	void unlock();
 };
 
+extern Ticketlock ticketlock;

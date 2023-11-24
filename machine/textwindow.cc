@@ -43,9 +43,9 @@ void TextWindow::print(const char* string, size_t length, Attribute attrib) {
     unsigned abs_x;
     unsigned abs_y;
     getPos(abs_x, abs_y);
+    abs_x += from_col;
+    abs_y += from_row;
     for (size_t i = 0; i < length; i++) {
-        abs_x += from_col;
-        abs_y += from_row;
         if (string[i] == '\n') {
             abs_x = from_col;
             abs_y++;
@@ -53,8 +53,6 @@ void TextWindow::print(const char* string, size_t length, Attribute attrib) {
                 abs_y = to_row - 1;
                 helper(from_row, to_row, from_col, to_col);
             }
-            abs_x -= from_col;
-            abs_y -= from_row;
             continue;
         }
         TextMode::show(abs_x, abs_y, string[i], attrib);
@@ -67,8 +65,6 @@ void TextWindow::print(const char* string, size_t length, Attribute attrib) {
                 helper(from_row, to_row, from_col, to_col);
                 }
         }
-        abs_x -= from_col;
-        abs_y -= from_row;
     }
     setPos(abs_x - from_col, abs_y - from_row);
 }
