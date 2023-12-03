@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "interrupt/guard.h"
+
 /*! \brief A handy interface to protect critical sections
  *  \ingroup interrupts
  *
@@ -34,4 +36,11 @@ class Guarded {
 
  public:
 	// TODO: Implement constructor and destructor
+	Guarded() {
+		Guard::enter();
+	}
+
+	~Guarded() {
+		Guard::leave();
+	}
 };

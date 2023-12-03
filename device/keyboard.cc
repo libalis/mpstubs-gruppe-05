@@ -15,10 +15,30 @@ void Keyboard::plugin() {
     IOAPIC::allow(slot);
 }
 
-void Keyboard::trigger() {
-    Key pressed;
-    if (PS2Controller::fetch(pressed)) {
-        if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL) System::reboot();
+bool Keyboard::prologue() {
+    return PS2Controller::fetch(pressed);
+}
+
+void Keyboard::epilogue() {
+    if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL) System::reboot();
+    if (pressed.scancode == Key::KEY_BACKSPACE) {
+        ticketlock.lock();
+        position--;
+        position %= TextMode::COLUMNS;
+        kout.setPos(position, 0);
+        kout << ' ';
+        kout.flush();
+        ticketlock.unlock();
+    } else if (pressed.scancode == Key::KEY_ENTER) {
+        ticketlock.lock();
+        for (position = 0; position < TextMode::COLUMNS; position++) {
+            kout.setPos(position, 0);
+            kout << ' ';
+            kout.flush();
+        }
+        position = 0;
+        ticketlock.unlock();
+    } else {
         ticketlock.lock();
         kout.setPos(position, 0);
         position++;

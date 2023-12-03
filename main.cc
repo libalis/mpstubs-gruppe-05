@@ -1,6 +1,7 @@
 #include "boot/startup_ap.h"
 #include "debug/output.h"
 #include "device/keyboard.h"
+#include "interrupt/gatequeue.h"
 #include "machine/core.h"
 #include "machine/ioapic.h"
 #include "machine/lapic.h"
@@ -21,9 +22,14 @@ TextStream dout[Core::MAX]{
 };
 TextStream kout{0, TextMode::COLUMNS, 0, 17, true};
 
+Keyboard keyboard{};
+
+GateQueue gatequeue{};
+
 Ticketlock ticketlock{};
 
-Keyboard keyboard{};
+Ticketlock corelock[Core::MAX]{};
+Ticketlock BKL{};
 
 const char * os_name = "MP" "StuBS";
 

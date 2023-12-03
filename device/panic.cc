@@ -1,8 +1,9 @@
 #include "device/panic.h"
 #include "debug/output.h"
 
-void Panic::trigger() {
+bool Panic::prologue() {
     DBG << "Panic::trigger";
     DBG.flush();
     Core::die();
+    return false;
 }

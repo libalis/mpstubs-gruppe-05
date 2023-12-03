@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "machine/core.h"
+
 /*! \brief Class of objects that are capable of handling interrupts
  *  \ingroup interrupts
  *
@@ -17,9 +19,13 @@ class Gate {
 	Gate& operator=(const Gate&) = delete;
 
  public:
+	Gate* next[Core::MAX];
+
 	/*! \brief Constructor
 	 */
-	Gate() {}
+	Gate() {
+		for (uint32_t i = 0; i < Core::MAX; i++) next[i] = nullptr;
+	}
 
 	/*! \brief Destructor
 	 *
@@ -30,14 +36,6 @@ class Gate {
 	 */
 	virtual ~Gate() {}
 
-	/*! \brief Device-specific interrupt handler
-	 *
-	 * This method is executed immediately after the interrupt occurs
-	 * (asynchronously).
-	 * Since it is implemented as a pure virtual method, it must be implemented
-	 * by each derived classes.
-	 *
-	 */
-	virtual void trigger() = 0;
-
+	virtual void epilogue() {}
+	virtual bool prologue() = 0;
 };
