@@ -23,8 +23,7 @@ void Keyboard::epilogue() {
     if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL) System::reboot();
     if (pressed.scancode == Key::KEY_BACKSPACE) {
         ticketlock.lock();
-        position--;
-        position %= TextMode::COLUMNS;
+        if (position != 0) position--;
         kout.setPos(position, 0);
         kout << ' ';
         kout.flush();
