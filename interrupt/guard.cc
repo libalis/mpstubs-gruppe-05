@@ -3,23 +3,33 @@
 #include "machine/core.h"
 #include "sync/ticketlock.h"
 
+bool locked[Core::MAX];
+Ticketlock BKL{};
+
 void Guard::enter() {
-    corelock[Core::getID()].lock();
+    locked[Core::getID()] = true;
+    BKL.lock();
 }
 
 void Guard::leave() {
+    bool wasEnabled = Core::Interrupt::disable();
     for (Gate* item = gatequeue.dequeue(); item != nullptr; item = gatequeue.dequeue()) {
-        BKL.lock();
+        Core::Interrupt::enable();
         item->epilogue();
-        BKL.unlock();
+        Core::Interrupt::disable();
     }
-    corelock[Core::getID()].unlock();
+    locked[Core::getID()] = false;
+    BKL.unlock();
+    Core::Interrupt::restore(wasEnabled);
 }
 
 void Guard::relay(Gate* item) {
-    if (!gatequeue.enqueue(item)) return;
-    if (!corelock[Core::getID()].locked) {
+    if (!gatequeue.enqueue(item))
+        return;
+    if (!locked[Core::getID()]) {
+        Core::Interrupt::enable();
         enter();
+        Core::Interrupt::disable();
         leave();
     }
 }

@@ -26,11 +26,6 @@ Keyboard keyboard{};
 
 GateQueue gatequeue{};
 
-Ticketlock ticketlock{};
-
-Ticketlock corelock[Core::MAX]{};
-Ticketlock BKL{};
-
 const char * os_name = "MP" "StuBS";
 
 // Main function (the bootstrap processor starts here)

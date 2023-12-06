@@ -6,7 +6,6 @@
 #include "machine/ioapic.h"
 #include "machine/ps2controller.h"
 #include "machine/system.h"
-#include "sync/ticketlock.h"
 
 void Keyboard::plugin() {
     Plugbox::assign(Core::Interrupt::KEYBOARD, this);
@@ -20,30 +19,26 @@ bool Keyboard::prologue() {
 }
 
 void Keyboard::epilogue() {
-    if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL) System::reboot();
+    if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL)
+        System::reboot();
     if (pressed.scancode == Key::KEY_BACKSPACE) {
-        ticketlock.lock();
-        if (position != 0) position--;
+        if (position != 0)
+            position--;
         kout.setPos(position, 0);
         kout << ' ';
         kout.flush();
-        ticketlock.unlock();
     } else if (pressed.scancode == Key::KEY_ENTER) {
-        ticketlock.lock();
         for (position = 0; position < TextMode::COLUMNS; position++) {
             kout.setPos(position, 0);
             kout << ' ';
             kout.flush();
         }
         position = 0;
-        ticketlock.unlock();
     } else {
-        ticketlock.lock();
         kout.setPos(position, 0);
         position++;
         position %= TextMode::COLUMNS;
         kout << pressed.ascii();
         kout.flush();
-        ticketlock.unlock();
     }
 }

@@ -34,13 +34,11 @@ class Ticketlock {
 	volatile uint64_t ticket_count;
 
  public:
-	volatile bool locked;
-
 	/*! \brief Constructor
 	 *
 	 * \todo Complete Constructor (for \MPStuBS)
 	 */
-	Ticketlock() : ticket_current(0), ticket_count(0), locked(false) {}
+	Ticketlock() : ticket_current(0), ticket_count(0) {}
 
 	/*! \brief Enters the critical area. In case the area is already locked,
 	 *  \ref lock() will actively wait for the area can be entered.
@@ -56,8 +54,3 @@ class Ticketlock {
 	 */
 	void unlock();
 };
-
-extern Ticketlock ticketlock;
-
-extern Ticketlock corelock[Core::MAX];
-extern Ticketlock BKL;
