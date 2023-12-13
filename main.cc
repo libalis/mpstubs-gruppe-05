@@ -39,9 +39,6 @@ extern "C" int main() {
 
 	IOAPIC::init();
 
-	PS2Controller::init();
-	PS2Controller::drainBuffer();
-
 	keyboard.plugin();
 
 	// Start application processors

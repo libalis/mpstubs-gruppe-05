@@ -7,6 +7,7 @@ bool locked[Core::MAX];
 Ticketlock BKL{};
 
 void Guard::enter() {
+    Core::Interrupt::enable();
     locked[Core::getID()] = true;
     BKL.lock();
 }
@@ -27,7 +28,6 @@ void Guard::relay(Gate* item) {
     if (!gatequeue.enqueue(item))
         return;
     if (!locked[Core::getID()]) {
-        Core::Interrupt::enable();
         enter();
         Core::Interrupt::disable();
         leave();

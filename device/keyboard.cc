@@ -8,6 +8,8 @@
 #include "machine/system.h"
 
 void Keyboard::plugin() {
+    PS2Controller::init();
+    PS2Controller::drainBuffer();
     Plugbox::assign(Core::Interrupt::KEYBOARD, this);
     uint8_t slot = APIC::getIOAPICSlot(APIC::Device::KEYBOARD);
     IOAPIC::config(slot, Core::Interrupt::KEYBOARD, IOAPIC::LEVEL);
@@ -15,12 +17,17 @@ void Keyboard::plugin() {
 }
 
 bool Keyboard::prologue() {
-    return PS2Controller::fetch(pressed);
+    Key input;
+    if (PS2Controller::fetch(input)) {
+        pressed = input;
+        if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL)
+            System::reboot();
+        return true;
+    }
+    return false;
 }
 
 void Keyboard::epilogue() {
-    if (pressed.ctrl() && pressed.alt() && pressed.scancode == Key::KEY_DEL)
-        System::reboot();
     if (pressed.scancode == Key::KEY_BACKSPACE) {
         if (position != 0)
             position--;
