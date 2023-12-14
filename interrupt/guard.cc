@@ -7,8 +7,8 @@ bool locked[Core::MAX];
 Ticketlock BKL{};
 
 void Guard::enter() {
-    Core::Interrupt::enable();
     locked[Core::getID()] = true;
+    Core::Interrupt::enable();
     BKL.lock();
 }
 
