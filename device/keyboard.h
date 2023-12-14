@@ -6,6 +6,7 @@
 
 #include "interrupt/gate.h"
 #include "debug/output.h"
+#include "object/key.h"
 
 /*! \brief Handles keystrokes.
  *  \ingroup io
@@ -21,6 +22,7 @@ class Keyboard : public Gate {
 
  private:
 	volatile uint8_t position;
+	Key pressed;
 
  public:
 	/*! \brief Constructor
@@ -51,18 +53,8 @@ class Keyboard : public Gate {
 	 */
 	void plugin();
 
-	/*! \brief Handling of keyboard interrupts
-	 *
-	 * Processes interrupts triggered by the keyboard.
-	 * On each keystroke it outputs the corresponding character on the screen
-	 * -- only \ref Key::valid() "valid keys" are printed, for the sake of
-	 * simplicity all in a separate line dedicated to the keyboard.
-	 * If the key combination \key{Ctrl} + \key{Alt} + \key{Del} is pressed,
-	 * a reboot is triggered.
-	 *
-	 *  \todo Implement Method
-	 */
-	void trigger() override;
+	bool prologue() override;
+	void epilogue() override;
 
 };
 

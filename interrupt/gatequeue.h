@@ -41,3 +41,5 @@ class GateQueue {
 	 */
 	Gate* dequeue();
 };
+
+extern GateQueue gatequeue;

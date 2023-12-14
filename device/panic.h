@@ -24,10 +24,5 @@ class Panic : public Gate {
 	 */
 	Panic() {}
 
-	/*! \brief Simplest possible interrupt handling: Displaying an error message
-	* and stopping the current core.
-	 *
-	 *  \todo Implement Method
-	 */
-	void trigger() override;
+	bool prologue() override;
 };

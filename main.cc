@@ -1,6 +1,7 @@
 #include "boot/startup_ap.h"
 #include "debug/output.h"
 #include "device/keyboard.h"
+#include "interrupt/gatequeue.h"
 #include "machine/core.h"
 #include "machine/ioapic.h"
 #include "machine/lapic.h"
@@ -21,9 +22,9 @@ TextStream dout[Core::MAX]{
 };
 TextStream kout{0, TextMode::COLUMNS, 0, 17, true};
 
-Ticketlock ticketlock{};
-
 Keyboard keyboard{};
+
+GateQueue gatequeue{};
 
 const char * os_name = "MP" "StuBS";
 
@@ -37,9 +38,6 @@ extern "C" int main() {
 	DBG_VERBOSE << "Number of CPUs: " << num_cpus << endl;
 
 	IOAPIC::init();
-
-	PS2Controller::init();
-	PS2Controller::drainBuffer();
 
 	keyboard.plugin();
 
