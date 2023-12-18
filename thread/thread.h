@@ -24,10 +24,15 @@ class Thread : public Queue<Thread>::Node {
 	 */
 	static const size_t STACK_SIZE = 4096;
 
+ private:
+	uint8_t reserved_stack_space[STACK_SIZE];
+
  protected:
 	/*! \brief Current stack pointer of thread for context switch
 	 */
 	StackPointer stackpointer;
+
+	static void kickoff(void* object);  // !!!TODO!!!
 
 	/*! \brief Function to start a thread.
 	 *
@@ -99,7 +104,7 @@ class Thread : public Queue<Thread>::Node {
 	 *       still contains a predefined value (which was set in constructor).
 	 *
 	 */
-	void resume(Thread *next);
+	void resume(Thread* next);
 
 	/*! \brief Method that contains the thread's program code.
 	 *

@@ -20,6 +20,9 @@
  *  taken from the front of the queue.
  */
 class Scheduler : public Dispatcher {
+ private:
+	static Queue<Thread> readylist;
+
 	/*! \brief private constructor to prevent instantiation
 	 */
 	Scheduler();
@@ -45,7 +48,7 @@ class Scheduler : public Dispatcher {
 	 *  \todo Implement Method
 	 *
 	 */
-	static void ready(Thread *that);
+	static void ready(Thread* that);
 
 	/*! \brief (Self-)termination of the calling thread.
 	 *
@@ -72,7 +75,7 @@ class Scheduler : public Dispatcher {
 	 *
 	 *  \todo Implement Method
 	 */
-	static void kill(Thread *that);
+	static void kill(Thread* that);
 
 	/*! \brief Issue a thread change
 	 *

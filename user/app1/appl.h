@@ -1,10 +1,12 @@
 #pragma once
 
+#include "thread/thread.h"
+
 /*! \brief Test application
  *
  *
  */
-class Application {
+class Application : public Thread {
 	// Prevent copies and assignments
 	Application(const Application&)            = delete;
 	Application& operator=(const Application&) = delete;
@@ -17,5 +19,5 @@ class Application {
 	/*! \brief Contains the application code.
 	 *
 	 */
-	void action();
+	void action() override;
 };

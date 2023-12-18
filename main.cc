@@ -7,6 +7,7 @@
 #include "machine/lapic.h"
 #include "machine/ps2controller.h"
 #include "sync/ticketlock.h"
+#include "thread/scheduler.h"
 #include "user/app1/appl.h"
 #include "utils/string.h"
 
@@ -22,9 +23,8 @@ TextStream dout[Core::MAX]{
 };
 TextStream kout{0, TextMode::COLUMNS, 0, 17, true};
 
-Keyboard keyboard{};
-
-GateQueue gatequeue{};
+Application appfoo{};
+Application appbar{};
 
 const char * os_name = "MP" "StuBS";
 
@@ -51,7 +51,9 @@ extern "C" int main() {
 
 	Core::Interrupt::enable();
 
-	Application{}.action();
+	Scheduler::ready(&appfoo);
+	Scheduler::ready(&appbar);
+	Scheduler::schedule();
 
 	return 0;
 }
@@ -67,7 +69,9 @@ extern "C" int main_ap() {
 
 	Core::Interrupt::enable();
 
-	Application{}.action();
+	Scheduler::ready(&appfoo);
+	Scheduler::ready(&appbar);
+	Scheduler::schedule();
 
 	return 0;
 }
