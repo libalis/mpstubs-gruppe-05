@@ -1,15 +1,12 @@
 #include "boot/startup_ap.h"
 #include "debug/output.h"
 #include "device/keyboard.h"
-#include "interrupt/gatequeue.h"
+#include "interrupt/guard.h"
 #include "machine/core.h"
 #include "machine/ioapic.h"
 #include "machine/lapic.h"
-#include "machine/ps2controller.h"
-#include "sync/ticketlock.h"
 #include "thread/scheduler.h"
 #include "user/app1/appl.h"
-#include "utils/string.h"
 
 TextStream dout[Core::MAX]{
 	{0, TextMode::COLUMNS/2, 18, 21},
@@ -23,8 +20,7 @@ TextStream dout[Core::MAX]{
 };
 TextStream kout{0, TextMode::COLUMNS, 0, 17, true};
 
-Application appfoo{};
-Application appbar{};
+Application app[Core::MAX + 1]{};
 
 const char * os_name = "MP" "StuBS";
 
@@ -41,18 +37,20 @@ extern "C" int main() {
 
 	keyboard.plugin();
 
+	for (unsigned int i = 0; i < Core::MAX + 1; i++)
+		Scheduler::ready(&app[i]);
+
 	// Start application processors
 	ApplicationProcessor::boot();
+
+	Core::Interrupt::enable();
 
 	DBG << "CPU " << Core::getID() << " ready" << endl;
 
 	DBG_VERBOSE << "CPU core " << static_cast<int>(Core::getID())
 	            << " / LAPIC " << static_cast<int>(LAPIC::getID()) << " in main_ap()" << endl;
 
-	Core::Interrupt::enable();
-
-	Scheduler::ready(&appfoo);
-	Scheduler::ready(&appbar);
+	Guard::enter();
 	Scheduler::schedule();
 
 	return 0;
@@ -60,6 +58,8 @@ extern "C" int main() {
 
 // Main function for application processors
 extern "C" int main_ap() {
+	Core::Interrupt::enable();
+
 	DBG.reset();
 
 	DBG << "CPU " << Core::getID() << " ready" << endl;
@@ -67,10 +67,7 @@ extern "C" int main_ap() {
 	DBG_VERBOSE << "CPU core " << static_cast<int>(Core::getID())
 	            << " / LAPIC " << static_cast<int>(LAPIC::getID()) << " in main_ap()" << endl;
 
-	Core::Interrupt::enable();
-
-	Scheduler::ready(&appfoo);
-	Scheduler::ready(&appbar);
+	Guard::enter();
 	Scheduler::schedule();
 
 	return 0;

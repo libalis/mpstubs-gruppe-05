@@ -32,8 +32,6 @@ class Thread : public Queue<Thread>::Node {
 	 */
 	StackPointer stackpointer;
 
-	static void kickoff(void* object);  // !!!TODO!!!
-
 	/*! \brief Function to start a thread.
 	 *
 	 *  For the first activation of a thread, we need a "return address"

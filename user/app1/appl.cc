@@ -1,10 +1,10 @@
 #include "user/app1/appl.h"
 #include "debug/output.h"
 #include "interrupt/guarded.h"
-#include "machine/core.h"
 #include "thread/scheduler.h"
 
 void Application::action() {
+    Guard::leave();
     uint64_t count = 0;
     while (true) {
         Guarded section;
