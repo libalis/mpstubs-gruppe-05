@@ -1,20 +1,20 @@
 #include "thread/thread.h"
+#include "interrupt/guard.h"
 
-uint8_t the_sarlacc_pit[Thread::STACK_SIZE];
-size_t count;
+static size_t count;
 
 void Thread::go() {
-    void** rsp = reinterpret_cast<void**>(&the_sarlacc_pit[STACK_SIZE - 1]);
     StackPointer sp;
-    sp.kernel = rsp;
     context_switch(sp, stackpointer);
 }
 
 void Thread::kickoff(Thread* object) {
+    Guard::leave();
     object->action();
 }
 
 void Thread::resume(Thread* next) {
+    assert(reserved_stack_space[1] == 0xaa && reserved_stack_space[0] == 0x55);
     context_switch(stackpointer, next->stackpointer);
 }
 

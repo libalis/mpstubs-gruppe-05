@@ -3,7 +3,9 @@
 Queue<Thread> Scheduler::readylist{};
 
 void Scheduler::exit() {
-    dispatch(readylist.dequeue());
+    Thread* thread = readylist.dequeue();
+    assert(thread != nullptr);
+    dispatch(thread);
 }
 
 void Scheduler::kill(Thread* that) {
@@ -16,10 +18,15 @@ void Scheduler::ready(Thread* that) {
 }
 
 void Scheduler::resume() {
-    readylist.enqueue(active());
-    dispatch(readylist.dequeue());
+    if ( ! active()->kill_flag)
+        readylist.enqueue(active());
+    Thread* thread = readylist.dequeue();
+    assert(thread != nullptr);
+    dispatch(thread);
 }
 
 void Scheduler::schedule() {
-    go(readylist.dequeue());
+    Thread* thread = readylist.dequeue();
+    assert(thread != nullptr);
+    go(thread);
 }
