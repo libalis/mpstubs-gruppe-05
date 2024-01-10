@@ -18,7 +18,7 @@ void Scheduler::ready(Thread* that) {
 }
 
 void Scheduler::resume() {
-    if ( ! active()->kill_flag)
+    if (!active()->kill_flag)
         readylist.enqueue(active());
     Thread* thread = readylist.dequeue();
     assert(thread != nullptr);
