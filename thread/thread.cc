@@ -23,5 +23,5 @@ Thread::Thread() : id(count++) {
     reserved_stack_space[0] = 0x55;
     void (* casted_kickoff)(void *);
     casted_kickoff = reinterpret_cast<void (*)(void *)>(kickoff);
-    stackpointer.kernel = prepareContext(&reserved_stack_space[STACK_SIZE - 8], casted_kickoff, this);
+    stackpointer.kernel = prepareContext(&reserved_stack_space[STACK_SIZE], casted_kickoff, this);
 }
