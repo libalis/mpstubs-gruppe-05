@@ -7,6 +7,8 @@
 #include "machine/ps2controller.h"
 #include "machine/system.h"
 
+Keyboard keyboard{};
+
 void Keyboard::plugin() {
     PS2Controller::init();
     PS2Controller::drainBuffer();

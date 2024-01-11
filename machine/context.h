@@ -56,3 +56,5 @@ void * prepareContext(void * tos, void (*kickoff)(void *),
  *  \todo Implement Method
  */
 extern "C" void context_switch(StackPointer & current, StackPointer & next);
+
+extern "C" void prepare_parameter();

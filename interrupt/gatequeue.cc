@@ -1,6 +1,7 @@
 #include "interrupt/gatequeue.h"
 #include "machine/core.h"
 
+GateQueue gatequeue{};
 Gate* head[Core::MAX];
 
 bool GateQueue::enqueue(Gate* item)  {

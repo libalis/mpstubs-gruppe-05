@@ -17,6 +17,9 @@
  *  every CPU core needs its own life pointer.
  */
 class Dispatcher {
+ private:
+	static Thread* life_pointer[Core::MAX];
+
 	/*! \brief private constructor to prevent instantiation
 	 */
 	Dispatcher();
@@ -25,7 +28,7 @@ class Dispatcher {
 	 *  \param thread active Thread
 	 */
 	static void setActive(Thread* thread) {
-		(void) thread;
+		life_pointer[Core::getID()] = thread;
 	}
 
  public:
@@ -36,7 +39,7 @@ class Dispatcher {
 	 *  \todo Implement Method
 	 */
 	static Thread* active() {
-		return nullptr;
+		return life_pointer[Core::getID()];
 	}
 
 	/*! \brief This method stores `first` as life pointer for this CPU core and
@@ -46,7 +49,7 @@ class Dispatcher {
 	 *
 	 *  \todo Implement Method
 	 */
-	static void go(Thread * first);
+	static void go(Thread* first);
 
 	/*! \brief Updates the life pointer to next and issues a thread change from
 	 *  the old to the new life pointer.
@@ -54,5 +57,5 @@ class Dispatcher {
 	 *
 	 *  \todo Implement Method
 	 */
-	static void dispatch(Thread *next);
+	static void dispatch(Thread* next);
 };
