@@ -1,10 +1,12 @@
 #include "boot/startup_ap.h"
 #include "debug/output.h"
 #include "device/keyboard.h"
+#include "device/watch.h"
 #include "interrupt/guard.h"
 #include "machine/core.h"
 #include "machine/ioapic.h"
 #include "machine/lapic.h"
+#include "thread/assassin.h"
 #include "thread/scheduler.h"
 #include "user/app1/appl.h"
 
@@ -36,12 +38,17 @@ extern "C" int main() {
 	IOAPIC::init();
 
 	keyboard.plugin();
+	assassin.hire();
 
 	for (unsigned int i = 0; i < Core::MAX + 1; i++)
 		Scheduler::ready(&app[i]);
 
+	watch[Core::getID()].windup(5000000);
+
 	// Start application processors
 	ApplicationProcessor::boot();
+
+	watch[Core::getID()].activate();
 
 	Core::Interrupt::enable();
 
@@ -58,6 +65,8 @@ extern "C" int main() {
 
 // Main function for application processors
 extern "C" int main_ap() {
+	watch[Core::getID()].activate();
+
 	Core::Interrupt::enable();
 
 	DBG.reset();

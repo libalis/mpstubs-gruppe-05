@@ -17,6 +17,11 @@ class Watch : public Gate {
 	Watch(const Watch&)            = delete;
 	Watch& operator=(const Watch&) = delete;
 
+ private:
+	static uint32_t ival;
+	static uint8_t divide;
+	static uint32_t counter;
+
  public:
 	Watch() {}
 
@@ -73,3 +78,5 @@ class Watch : public Gate {
 	void activate() const;
 
 };
+
+extern Watch watch[];

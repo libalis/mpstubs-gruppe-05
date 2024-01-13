@@ -52,3 +52,5 @@ class Assassin : public Gate {
 	 */
 	virtual void epilogue();
 };
+
+extern Assassin assassin;

@@ -2,6 +2,8 @@
 #include "machine/lapic.h"
 #include "machine/lapic_registers.h"
 #include "machine/core.h"
+#include "machine/pit.h"
+#include "debug/assert.h"
 
 namespace LAPIC {
 namespace Timer {
@@ -79,18 +81,31 @@ Register getClockDiv(uint8_t div) {
 }
 
 uint32_t ticks(void) {
-	uint32_t ticks = 0;  // ticks per millisecond
-	// Calculation (Assignment 5)
+	uint32_t start = 1000;
+	set(start, 1, Core::Interrupt::TIMER, false, true);
 
-	return ticks;
+	assert(PIT::set(1000));
+	assert(PIT::waitForTimeout());
+	PIT::disable();
+
+	uint32_t end = read(TIMER_CURRENT_COUNTER);
+	return start - end;
 }
 
 void set(uint32_t counter, uint8_t divide, uint8_t vector, bool periodic, bool masked) {
-	(void) counter;
-	(void) divide;
-	(void) vector;
-	(void) periodic;
-	(void) masked;
+	ControlRegister control_register;
+	control_register.value = read(TIMER_CONTROL);
+	control_register.timer_mode = periodic ? PERIODIC : ONE_SHOT;
+	control_register.masked = masked ? MASKED : NOT_MASKED;
+	control_register.vector = vector;
+	write(TIMER_CONTROL, control_register.value);
+
+	Register clockDiv = getClockDiv(divide);
+	assert(clockDiv != INVALID_DIV);
+	write(TIMER_DIVIDE_CONFIGURATION, clockDiv);
+
+	Register initial = counter;
+	write(TIMER_INITIAL_COUNTER, initial);
 }
 
 }  // namespace Timer

@@ -58,4 +58,14 @@ class Dispatcher {
 	 *  \todo Implement Method
 	 */
 	static void dispatch(Thread* next);
+
+	/*! \brief Check if thread is currently active.
+	 *  Updates the life pointer to next and issues a thread change from the old to the new life pointer.
+	 *  Returns true if currently running, false otherwise
+	 *
+	 *  \param thread Pointer to the thread in question
+	 *          cpu will receive the core number if cpu pointer is not nullptr and the thread is currently active
+	 *  \todo Implement method for kill IPI (in MPStuBS only)
+	 */
+	static bool isActive(const Thread* thread, unsigned* cpu = nullptr);
 };
