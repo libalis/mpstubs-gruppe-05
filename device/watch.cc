@@ -1,35 +1,37 @@
 #include "device/watch.h"
+#include "debug/output.h"
 #include "interrupt/plugbox.h"
 #include "machine/lapic.h"
-#include "syscall/guarded_scheduler.h"
+#include "thread/scheduler.h"
 
-uint32_t Watch::ival = 0;
-uint8_t Watch::divide = 0;
-uint32_t Watch::counter = 0;
-
-Watch watch[Core::MAX]{};
+Watch watch{};
 
 bool Watch::windup(uint32_t us) {
     Plugbox::assign(Core::Interrupt::TIMER, this);
-    uint32_t ticks = LAPIC::Timer::ticks();
-    for (divide = 1; divide < UINT8_MAX; divide *= 2) {
-        uint64_t divisor_long = (us * ticks);
-        uint32_t divisor = (us * ticks);
+    uint32_t ticks = LAPIC::Timer::ticks() / 1000;
+    uint64_t u = static_cast<uint64_t>(us) * ticks;
+    uint16_t div;
+    for (div = 1; div < UINT8_MAX; div *= 2) {
+        uint64_t divisor_long = u / div;
+        uint32_t divisor = u / div;
         if (divisor_long == divisor) break;
     }
-    if (divide == UINT8_MAX)
+    if (div >= UINT8_MAX)
         return false;
+    divide = div;
     ival = us;
-    counter = (us*ticks)/(divide*1000);
+    counter = u / divide;
     return true;
 }
 
 bool Watch::prologue() {
+    static int i = 0;
+    DBG << "TIMER " << i++ << endl;
     return true;
 }
 
 void Watch::epilogue() {
-    GuardedScheduler::resume();
+    Scheduler::resume();
 }
 
 uint32_t Watch::interval() const {

@@ -43,14 +43,12 @@ extern "C" int main() {
 	for (unsigned int i = 0; i < Core::MAX + 1; i++)
 		Scheduler::ready(&app[i]);
 
-	watch[Core::getID()].windup(5000000);
+	assert(watch.windup(5000000));
 
 	// Start application processors
 	ApplicationProcessor::boot();
 
-	watch[Core::getID()].activate();
-
-	Core::Interrupt::enable();
+	watch.activate();
 
 	DBG << "CPU " << Core::getID() << " ready" << endl;
 
@@ -58,6 +56,7 @@ extern "C" int main() {
 	            << " / LAPIC " << static_cast<int>(LAPIC::getID()) << " in main_ap()" << endl;
 
 	Guard::enter();
+	Core::Interrupt::enable();
 	Scheduler::schedule();
 
 	return 0;
@@ -65,9 +64,7 @@ extern "C" int main() {
 
 // Main function for application processors
 extern "C" int main_ap() {
-	watch[Core::getID()].activate();
-
-	Core::Interrupt::enable();
+	watch.activate();
 
 	DBG.reset();
 
@@ -77,6 +74,7 @@ extern "C" int main_ap() {
 	            << " / LAPIC " << static_cast<int>(LAPIC::getID()) << " in main_ap()" << endl;
 
 	Guard::enter();
+	Core::Interrupt::enable();
 	Scheduler::schedule();
 
 	return 0;

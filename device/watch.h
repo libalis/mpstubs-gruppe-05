@@ -18,12 +18,12 @@ class Watch : public Gate {
 	Watch& operator=(const Watch&) = delete;
 
  private:
-	static uint32_t ival;
-	static uint8_t divide;
-	static uint32_t counter;
+	uint32_t ival;
+	uint8_t divide;
+	uint32_t counter;
 
  public:
-	Watch() {}
+	Watch() : ival(0), divide(0), counter(0) {}
 
 	/*! \brief Windup / initialize
 	 *
@@ -79,4 +79,4 @@ class Watch : public Gate {
 
 };
 
-extern Watch watch[];
+extern Watch watch;

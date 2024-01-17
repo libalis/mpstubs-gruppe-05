@@ -81,15 +81,15 @@ Register getClockDiv(uint8_t div) {
 }
 
 uint32_t ticks(void) {
-	uint32_t start = 1000;
+	uint32_t start = UINT32_MAX;
 	set(start, 1, Core::Interrupt::TIMER, false, true);
 
-	assert(PIT::set(1000));
+	assert(PIT::set(10000));
 	assert(PIT::waitForTimeout());
 	PIT::disable();
 
 	uint32_t end = read(TIMER_CURRENT_COUNTER);
-	return start - end;
+	return (start - end) / (10000 / 1000);
 }
 
 void set(uint32_t counter, uint8_t divide, uint8_t vector, bool periodic, bool masked) {

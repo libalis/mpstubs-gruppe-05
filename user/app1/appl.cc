@@ -1,7 +1,7 @@
 #include "user/app1/appl.h"
 #include "debug/output.h"
 #include "interrupt/guarded.h"
-#include "syscall/guarded_scheduler.h"
+#include "thread/scheduler.h"
 
 extern Application app[];
 
@@ -12,7 +12,7 @@ void Application::action() {
         kout.setPos(0, id + 1);
         kout << count++;
         kout.flush();
-        if (id == 2 && count >= 10000) GuardedScheduler::kill(&app[0]);
-        if (id == 1 && count >= 10000) GuardedScheduler::kill(this);
+        if (id == 2 && count >= 10000) Scheduler::kill(&app[0]);
+        if (id == 1 && count >= 10000) Scheduler::kill(this);
     }
 }
