@@ -8,8 +8,8 @@ Watch watch{};
 
 bool Watch::windup(uint32_t us) {
     Plugbox::assign(Core::Interrupt::TIMER, this);
-    uint32_t ticks = LAPIC::Timer::ticks() / 1000;
-    uint64_t u = static_cast<uint64_t>(us) * ticks;
+    uint64_t u = static_cast<uint64_t>(us) * LAPIC::Timer::ticks();
+    u /= 1000;
     uint16_t div;
     for (div = 1; div < UINT8_MAX; div *= 2) {
         uint64_t divisor_long = u / div;
