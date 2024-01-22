@@ -1,10 +1,12 @@
 #include "boot/startup_ap.h"
 #include "debug/output.h"
 #include "device/keyboard.h"
+#include "device/watch.h"
 #include "interrupt/guard.h"
 #include "machine/core.h"
 #include "machine/ioapic.h"
 #include "machine/lapic.h"
+#include "thread/assassin.h"
 #include "thread/scheduler.h"
 #include "user/app1/appl.h"
 
@@ -36,14 +38,17 @@ extern "C" int main() {
 	IOAPIC::init();
 
 	keyboard.plugin();
+	assassin.hire();
 
 	for (unsigned int i = 0; i < Core::MAX + 1; i++)
 		Scheduler::ready(&app[i]);
 
+	assert(watch.windup(5000000));
+
 	// Start application processors
 	ApplicationProcessor::boot();
 
-	Core::Interrupt::enable();
+	watch.activate();
 
 	DBG << "CPU " << Core::getID() << " ready" << endl;
 
@@ -51,6 +56,7 @@ extern "C" int main() {
 	            << " / LAPIC " << static_cast<int>(LAPIC::getID()) << " in main_ap()" << endl;
 
 	Guard::enter();
+	Core::Interrupt::enable();
 	Scheduler::schedule();
 
 	return 0;
@@ -58,7 +64,7 @@ extern "C" int main() {
 
 // Main function for application processors
 extern "C" int main_ap() {
-	Core::Interrupt::enable();
+	watch.activate();
 
 	DBG.reset();
 
@@ -68,6 +74,7 @@ extern "C" int main_ap() {
 	            << " / LAPIC " << static_cast<int>(LAPIC::getID()) << " in main_ap()" << endl;
 
 	Guard::enter();
+	Core::Interrupt::enable();
 	Scheduler::schedule();
 
 	return 0;

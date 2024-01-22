@@ -14,6 +14,5 @@ void Application::action() {
         kout.flush();
         if (id == 2 && count >= 10000) Scheduler::kill(&app[0]);
         if (id == 1 && count >= 10000) Scheduler::kill(this);
-        Scheduler::resume();
     }
 }

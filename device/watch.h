@@ -17,8 +17,13 @@ class Watch : public Gate {
 	Watch(const Watch&)            = delete;
 	Watch& operator=(const Watch&) = delete;
 
+ private:
+	uint32_t ival;
+	uint8_t divide;
+	uint32_t counter;
+
  public:
-	Watch() {}
+	Watch() : ival(0), divide(0), counter(0) {}
 
 	/*! \brief Windup / initialize
 	 *
@@ -73,3 +78,5 @@ class Watch : public Gate {
 	void activate() const;
 
 };
+
+extern Watch watch;

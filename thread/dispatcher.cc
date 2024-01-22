@@ -14,3 +14,14 @@ void Dispatcher::dispatch(Thread* next) {
     setActive(next);
     current->resume(next);
 }
+
+bool Dispatcher::isActive(const Thread* thread, unsigned* cpu) {
+    for (unsigned i = 0; i < Core::MAX; i++) {
+        if (life_pointer[i] == thread) {
+            if (cpu != nullptr)
+                *cpu = i;
+            return true;
+        }
+    }
+    return false;
+}
