@@ -16,7 +16,7 @@
  *       ready queue, as the IdleThread should only be executed if there is no
  *       proper work to do.
   */
-class IdleThread {
+class IdleThread : public Thread {
  public:
 
 	/*! \brief Wait for a thread to become ready and sleep in the meantime.
@@ -25,3 +25,5 @@ class IdleThread {
 	 */
 	void action();
 };
+
+extern IdleThread idlethread[];

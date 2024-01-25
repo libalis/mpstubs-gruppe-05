@@ -1,5 +1,4 @@
 #include "interrupt/plugbox.h"
-#include "device/keyboard.h"
 #include "device/panic.h"
 #include "machine/core_interrupt.h"
 

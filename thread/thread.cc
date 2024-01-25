@@ -18,7 +18,7 @@ void Thread::resume(Thread* next) {
     context_switch(stackpointer, next->stackpointer);
 }
 
-Thread::Thread() : id(count++) {
+Thread::Thread() : waitingroom(nullptr), id(count++) {
     reserved_stack_space[1] = 0xaa;
     reserved_stack_space[0] = 0x55;
     void (* casted_kickoff)(void *);

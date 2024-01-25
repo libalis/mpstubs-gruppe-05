@@ -7,6 +7,9 @@
 #include "interrupt/gate.h"
 #include "debug/output.h"
 #include "object/key.h"
+#include "syscall/guarded_semaphore.h"
+
+#define BUFFER_SIZE (1024)
 
 /*! \brief Handles keystrokes.
  *  \ingroup io
@@ -21,13 +24,14 @@ class Keyboard : public Gate {
 	Keyboard& operator=(const Keyboard&) = delete;
 
  private:
-	volatile uint8_t position;
-	Key pressed;
+	Key pressed[BUFFER_SIZE];
+	int counter;
+	GuardedSemaphore guardedsemaphore;
 
  public:
 	/*! \brief Constructor
 	 */
-	Keyboard() : position(0) {}
+	Keyboard() : counter(0), guardedsemaphore(0) {}
 
 	/*! \brief Destructor
 	 */
@@ -55,7 +59,5 @@ class Keyboard : public Gate {
 
 	bool prologue() override;
 	void epilogue() override;
-
+	Key getKey();
 };
-
-extern Keyboard keyboard;
