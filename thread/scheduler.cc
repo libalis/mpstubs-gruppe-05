@@ -29,7 +29,7 @@ void Scheduler::ready(Thread* that) {
 }
 
 void Scheduler::resume() {
-    if (!active()->kill_flag)
+    if (!active()->kill_flag && active() != &idlethread[Core::getID()])
         readylist.enqueue(active());
     Thread* thread = readylist.dequeue();
     if (thread == nullptr)
@@ -46,6 +46,7 @@ void Scheduler::schedule() {
 
 void Scheduler::block(Waitingroom* waitingroom) {
     (*waitingroom).enqueue(active());
+    active()->setWaitingroom(waitingroom);
     Thread* thread = readylist.dequeue();
     if (thread == nullptr)
         thread = &idlethread[Core::getID()];
@@ -55,8 +56,5 @@ void Scheduler::block(Waitingroom* waitingroom) {
 void Scheduler::wakeup(Thread* customer) {
     customer->getWaitingroom()->remove(customer);
     readylist.enqueue(customer);
-    for (unsigned cpu = 0; cpu < Core::count(); cpu++) {
-        uint8_t destination = APIC::getLAPICID(cpu);
-        LAPIC::IPI::send(destination, Core::Interrupt::WAKEUP);
-    }
+    LAPIC::IPI::sendOthers(Core::Interrupt::WAKEUP);
 }

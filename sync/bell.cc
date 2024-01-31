@@ -8,6 +8,8 @@ void Bell::ring() {
 }
 
 void Bell::sleep(unsigned int ms) {
+    if (ms == 0)
+        return;
     Bell bell{ms};
     Bellringer::job(&bell, ms);
     Scheduler::block(&bell);

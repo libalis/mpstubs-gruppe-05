@@ -1,14 +1,14 @@
 #include "user/app2/kappl.h"
 #include "debug/output.h"
+#include "device/keyboard.h"
 #include "interrupt/guarded.h"
-#include "syscall/guarded_keyboard.h"
 
 void KeyboardApplication::action() {
     Key pressed;
     uint8_t position = 0;
     while (true) {
         Guarded guard;
-        pressed = guardedkeyboard.getKey();
+        pressed = keyboard.getKey();
         if (pressed.scancode == Key::KEY_BACKSPACE) {
             if (position != 0)
                 position--;

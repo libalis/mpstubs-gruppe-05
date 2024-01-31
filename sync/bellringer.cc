@@ -3,9 +3,11 @@
 Queue<Bell> Bellringer::queue{};
 
 void Bellringer::check() {
-    while ((queue.first()->ms)-- == 0) {
+    if (queue.first() == nullptr)
+        return;
+    queue.first()->ms--;
+    while (queue.first() != nullptr && queue.first()->ms == 0)
         queue.dequeue()->ring();
-    }
 }
 
 void Bellringer::job(Bell *bell, unsigned int ms) {
@@ -37,10 +39,12 @@ void Bellringer::cancel(Bell *bell) {
         if (*iterator == bell)
             break;
     }
-    (*(++iterator))->ms += bell->ms;
+    if (*iterator == nullptr || *(++iterator) == nullptr)
+        return;
+    (*iterator)->ms += bell->ms;
     queue.remove(bell);
 }
 
 bool Bellringer::bellPending() {
-    return queue.first()== nullptr ? false : true;
+    return queue.first() == nullptr ? false : true;
 }

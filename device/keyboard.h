@@ -4,10 +4,11 @@
 
 #pragma once
 
-#include "interrupt/gate.h"
 #include "debug/output.h"
+#include "interrupt/gate.h"
+#include "object/bbuffer.h"
 #include "object/key.h"
-#include "syscall/guarded_semaphore.h"
+#include "sync/semaphore.h"
 
 #define BUFFER_SIZE (1024)
 
@@ -24,14 +25,14 @@ class Keyboard : public Gate {
 	Keyboard& operator=(const Keyboard&) = delete;
 
  private:
-	Key pressed[BUFFER_SIZE];
-	int counter;
-	GuardedSemaphore guardedsemaphore;
+	BBuffer<Key, BUFFER_SIZE> pro;
+	BBuffer<Key, BUFFER_SIZE> epi;
+	Semaphore semaphore;
 
  public:
 	/*! \brief Constructor
 	 */
-	Keyboard() : counter(0), guardedsemaphore(0) {}
+	Keyboard() : semaphore(0) {}
 
 	/*! \brief Destructor
 	 */
@@ -61,3 +62,5 @@ class Keyboard : public Gate {
 	void epilogue() override;
 	Key getKey();
 };
+
+extern Keyboard keyboard;

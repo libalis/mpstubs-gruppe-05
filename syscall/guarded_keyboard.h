@@ -36,5 +36,3 @@ class GuardedKeyboard : public Keyboard {
 		return Keyboard::getKey();
 	}
 };
-
-extern GuardedKeyboard guardedkeyboard;

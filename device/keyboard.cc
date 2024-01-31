@@ -7,6 +7,8 @@
 #include "machine/ps2controller.h"
 #include "machine/system.h"
 
+Keyboard keyboard{};
+
 void Keyboard::plugin() {
     PS2Controller::init();
     PS2Controller::drainBuffer();
@@ -21,21 +23,23 @@ bool Keyboard::prologue() {
     if (PS2Controller::fetch(input)) {
         if (input.ctrl() && input.alt() && input.scancode == Key::KEY_DEL)
             System::reboot();
-        if (counter < BUFFER_SIZE) {
-            pressed[counter++] = input;
-            return true;
-        }
-        return false;
+        return pro.produce(input);
     }
     return false;
 }
 
 void Keyboard::epilogue() {
-    guardedsemaphore.v();
+    Key k;
+    while (pro.consume(k)) {
+        if (epi.produce(k))
+            semaphore.v();
+    }
 }
 
 Key Keyboard::getKey() {
-    counter--;
-    guardedsemaphore.p();
-    return pressed[0];
+    semaphore.p();
+    Key k;
+    bool b = epi.consume(k);
+    assert(b);
+    return k;
 }

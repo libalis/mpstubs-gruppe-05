@@ -1,11 +1,11 @@
 #include "boot/startup_ap.h"
 #include "debug/output.h"
+#include "device/keyboard.h"
 #include "device/watch.h"
 #include "interrupt/guard.h"
 #include "machine/core.h"
 #include "machine/ioapic.h"
 #include "machine/lapic.h"
-#include "syscall/guarded_keyboard.h"
 #include "thread/assassin.h"
 #include "thread/scheduler.h"
 #include "thread/wakeup.h"
@@ -41,7 +41,7 @@ extern "C" int main() {
 	IOAPIC::init();
 
 	assassin.hire();
-	guardedkeyboard.plugin();
+	keyboard.plugin();
 	wakeup.activate();
 
 	for (unsigned int i = 0; i < Core::MAX + 1; i++)
@@ -49,7 +49,8 @@ extern "C" int main() {
 
 	Scheduler::ready(&kapp);
 
-	assert(watch.windup(1000));
+	bool b = watch.windup(1000);
+	assert(b);
 
 	// Start application processors
 	ApplicationProcessor::boot();
