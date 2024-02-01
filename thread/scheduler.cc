@@ -15,6 +15,7 @@ void Scheduler::exit() {
 
 void Scheduler::kill(Thread* that) {
     that->kill_flag = true;
+    that->setWaitingroom(nullptr);
     if (readylist.remove(that) == 0) {
         unsigned cpu;
         if (isActive(that, &cpu)) {
