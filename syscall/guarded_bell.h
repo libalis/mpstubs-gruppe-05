@@ -5,6 +5,7 @@
 #pragma once
 
 #include "sync/bell.h"
+#include "interrupt/guarded.h"
 
 /*! \brief \ref Guarded interface to \ref Bell objects used by user applications.
  *
@@ -18,7 +19,7 @@ class GuardedBell : private Bell {
 	GuardedBell& operator=(const GuardedBell&) = delete;
 
  public:
-	GuardedBell() {}
+	explicit GuardedBell(unsigned int ms) : Bell(ms) {}
 
 	/*! \copydoc Bell::sleep()
 	 *
@@ -29,7 +30,7 @@ class GuardedBell : private Bell {
 	 *  \todo Implement method
 	 */
 	static void sleep(unsigned int ms) {
-		(void) ms;
+		Guarded guard;
+		Bell::sleep(ms);
 	}
-
 };

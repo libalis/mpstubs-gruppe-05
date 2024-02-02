@@ -6,6 +6,7 @@
 
 #include "sync/bell.h"
 #include "object/queue.h"
+
 /*! \brief Manages and activates time-triggered activities.
  *  \ingroup ipc
  *
@@ -20,6 +21,10 @@ class Bellringer {
 	Bellringer();
 	Bellringer(const Bellringer&)            = delete;
 	Bellringer& operator=(const Bellringer&) = delete;
+
+ private:
+	static Queue<Bell> queue;
+
  public:
 	/*! \brief Checks whether there are bells to be rung.
 	 *

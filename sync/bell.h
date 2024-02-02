@@ -6,6 +6,7 @@
 
 #include "sync/waitingroom.h"
 #include "object/queue.h"
+
 class Bellringer;
 
 /*! \brief Synchronization object allowing to sleep for given timespan
@@ -20,11 +21,13 @@ class Bell : public Waitingroom, public Queue<Bell>::Node {
 	Bell& operator=(const Bell&) = delete;
 
  public:
+	unsigned int ms;
+
 	/*! \brief Constructor
 	 *
 	 *  Constructs a new bell; the newly created bell is, at first, disabled.
 	 */
-	Bell() {}
+	explicit Bell(unsigned int ms) : ms(ms) {}
 
 	/*! \brief Ring the bell
 	 *

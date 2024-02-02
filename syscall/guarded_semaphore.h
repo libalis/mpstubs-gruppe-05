@@ -25,7 +25,7 @@ class GuardedSemaphore : private Semaphore {
 	 *
 	 *  \todo Implement constructor
 	 */
-	explicit GuardedSemaphore(unsigned c) {}
+	explicit GuardedSemaphore(unsigned c) : Semaphore(c) {}
 
 	/*! \copydoc Semaphore::p()
 	 *
@@ -36,6 +36,8 @@ class GuardedSemaphore : private Semaphore {
 	 *  \todo Implement method
 	 */
 	void p() {
+		Guarded guard;
+		Semaphore::p();
 	}
 
 	/*! \copydoc Semaphore::v()
@@ -47,5 +49,7 @@ class GuardedSemaphore : private Semaphore {
 	 *  \todo Implement method
 	 */
 	void v() {
+		Guarded guard;
+		Semaphore::v();
 	}
 };

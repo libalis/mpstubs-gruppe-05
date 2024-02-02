@@ -4,9 +4,13 @@
 
 #pragma once
 
-#include "interrupt/gate.h"
 #include "debug/output.h"
+#include "interrupt/gate.h"
+#include "object/bbuffer.h"
 #include "object/key.h"
+#include "sync/semaphore.h"
+
+#define BUFFER_SIZE (1024)
 
 /*! \brief Handles keystrokes.
  *  \ingroup io
@@ -21,13 +25,14 @@ class Keyboard : public Gate {
 	Keyboard& operator=(const Keyboard&) = delete;
 
  private:
-	volatile uint8_t position;
-	Key pressed;
+	BBuffer<Key, BUFFER_SIZE> pro;
+	BBuffer<Key, BUFFER_SIZE> epi;
+	Semaphore semaphore;
 
  public:
 	/*! \brief Constructor
 	 */
-	Keyboard() : position(0) {}
+	Keyboard() : semaphore(0) {}
 
 	/*! \brief Destructor
 	 */
@@ -55,7 +60,7 @@ class Keyboard : public Gate {
 
 	bool prologue() override;
 	void epilogue() override;
-
+	Key getKey();
 };
 
 extern Keyboard keyboard;

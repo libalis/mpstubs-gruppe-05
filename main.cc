@@ -8,7 +8,9 @@
 #include "machine/lapic.h"
 #include "thread/assassin.h"
 #include "thread/scheduler.h"
+#include "thread/wakeup.h"
 #include "user/app1/appl.h"
+#include "user/app2/kappl.h"
 
 TextStream dout[Core::MAX]{
 	{0, TextMode::COLUMNS/2, 18, 21},
@@ -23,6 +25,7 @@ TextStream dout[Core::MAX]{
 TextStream kout{0, TextMode::COLUMNS, 0, 17, true};
 
 Application app[Core::MAX + 1]{};
+KeyboardApplication kapp{};
 
 const char * os_name = "MP" "StuBS";
 
@@ -37,13 +40,17 @@ extern "C" int main() {
 
 	IOAPIC::init();
 
-	keyboard.plugin();
 	assassin.hire();
+	keyboard.plugin();
+	wakeup.activate();
 
 	for (unsigned int i = 0; i < Core::MAX + 1; i++)
 		Scheduler::ready(&app[i]);
 
-	assert(watch.windup(5000000));
+	Scheduler::ready(&kapp);
+
+	bool b = watch.windup(1000);
+	assert(b);
 
 	// Start application processors
 	ApplicationProcessor::boot();

@@ -4,9 +4,11 @@
 
 #pragma once
 
+#include "thread/thread.h"
+
 /*! \brief Keyboard Application
  */
-class KeyboardApplication {
+class KeyboardApplication : public Thread {
 	// Prevent copies and assignments
 	KeyboardApplication(const KeyboardApplication&)            = delete;
 	KeyboardApplication& operator=(const KeyboardApplication&) = delete;

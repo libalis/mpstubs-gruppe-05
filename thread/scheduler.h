@@ -91,4 +91,11 @@ class Scheduler : public Dispatcher {
 	 */
 	static void resume();
 
+	static bool isEmpty() {
+		return readylist.first() == nullptr;
+	}
+
+	static void block(Waitingroom* waitingroom);
+
+	static void wakeup(Thread* customer);
 };

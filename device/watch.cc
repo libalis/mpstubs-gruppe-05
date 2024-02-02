@@ -1,7 +1,7 @@
 #include "device/watch.h"
-#include "debug/output.h"
 #include "interrupt/plugbox.h"
 #include "machine/lapic.h"
+#include "sync/bellringer.h"
 #include "thread/scheduler.h"
 
 Watch watch{};
@@ -25,12 +25,12 @@ bool Watch::windup(uint32_t us) {
 }
 
 bool Watch::prologue() {
-    static int i = 0;
-    DBG << "TIMER " << i++ << endl;
     return true;
 }
 
 void Watch::epilogue() {
+    if (Core::getID() == 0)
+        Bellringer::check();
     Scheduler::resume();
 }
 

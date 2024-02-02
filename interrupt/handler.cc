@@ -7,7 +7,7 @@
 
 extern "C" void interrupt_handler(Core::Interrupt::Vector vector, InterruptContext* context) {
 	if (vector < Core::Interrupt::EXCEPTIONS) {
-		DBG << "error_code: " << context->error_code << endl;
+		DBG << "ip: " << context->ip << endl;
 		DBG << "vector: " << vector << endl;
 	}
 	Gate* item = Plugbox::report(vector);

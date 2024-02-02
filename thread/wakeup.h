@@ -31,3 +31,5 @@ class WakeUp : public Gate {
 	 */
 	bool prologue();
 };
+
+extern WakeUp wakeup;

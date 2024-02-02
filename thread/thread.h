@@ -14,6 +14,7 @@
 
 #include "machine/context.h"
 #include "object/queue.h"
+#include "sync/waitingroom.h"
 
 /*! \brief The is an object used by the scheduler.
  *  \ingroup thread
@@ -26,6 +27,7 @@ class Thread : public Queue<Thread>::Node {
 
  private:
 	uint8_t reserved_stack_space[STACK_SIZE];
+	Waitingroom* waitingroom;
 
  protected:
 	/*! \brief Current stack pointer of thread for context switch
@@ -111,4 +113,11 @@ class Thread : public Queue<Thread>::Node {
 	 */
 	virtual void action() = 0;
 
+	Waitingroom* getWaitingroom() const {
+		return waitingroom;
+	}
+
+	void setWaitingroom(Waitingroom* w) {
+		waitingroom = w;
+	}
 };

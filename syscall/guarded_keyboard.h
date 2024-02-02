@@ -4,6 +4,7 @@
 #pragma once
 
 #include "device/keyboard.h"
+#include "interrupt/guarded.h"
 
 /*! \brief syscall interface for keyboard.
  *
@@ -30,7 +31,8 @@ class GuardedKeyboard : public Keyboard {
 	 *
 	 *  \todo Implement method
 	 */
-	Key getKey(){
-		return Key();
+	Key getKey() {
+		Guarded guard;
+		return Keyboard::getKey();
 	}
 };

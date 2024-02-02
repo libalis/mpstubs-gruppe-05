@@ -17,15 +17,16 @@ class Semaphore : public Waitingroom {
 	Semaphore(const Semaphore&)            = delete;
 	Semaphore& operator=(const Semaphore&) = delete;
 
+ private:
+	unsigned counter;
+
  public:
 	/*! \brief Constructor; initialized the counter with provided value `c`
 	 *  \param c Initial counter value
 	 *
 	 *  \todo Implement Constructor
 	 */
-	explicit Semaphore(unsigned c = 0) {
-		(void)c;
-	}
+	explicit Semaphore(unsigned c = 0) : counter(c) {}
 
 	/*! \brief Wait for access to the critical area.
 	 *
